@@ -1,3 +1,4 @@
+import os
 import time
 
 import requests
@@ -40,13 +41,15 @@ def get_links():
         json.dump(result, file, ensure_ascii=False, indent=4)
 
 
-
 def check_update_vacancy():
     new_vacancy = {}
+    if not os.path.exists(f'result.json'):
+        get_links()
+
     with open('result.json') as file:
         result = json.load(file)
     ua = UserAgent()
-    url = 'https://hh.ru/search/vacancy?excluded_text=%D0%BF%D0%BE%D0%B4%D0%B4%D0%B5%D1%80%D0%B6%D0%BA%D0%B8%2C+NodeJS&schedule=remote&search_field=name&search_field=company_name&search_field=description&text=python&items_on_page=500&no_magic=true&L_save_area=true&page=1&hhtmFrom=vacancy_search_list'
+    url = 'https://hh.ru/search/vacancy?excluded_text=%D0%BF%D0%BE%D0%B4%D0%B4%D0%B5%D1%80%D0%B6%D0%BA%D0%B8%2C+NodeJS&schedule=remote&search_field=name&search_field=company_name&search_field=description&text=python&items_on_page=500&no_magic=true&L_save_area=true&page=0&hhtmFrom=vacancy_search_list'
 
     response = requests.get(url, headers={f'User-Agent': ua.random})
 
@@ -85,7 +88,6 @@ def check_update_vacancy():
 
 
 def main():
-    # get_links()
     check_update_vacancy()
 
 if __name__ == '__main__':
